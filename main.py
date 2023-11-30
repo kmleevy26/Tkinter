@@ -29,7 +29,7 @@ class MyGUI:
         self.button = tk.Button(self.root, text="Show Message", font=('Arial', 18), command=self.show_message)
         self.button.pack(padx=10, pady=10)
         
-
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
 
     # Show message function
@@ -38,3 +38,16 @@ class MyGUI:
             print(self.textbox.get('1.0', tk.END))
         else:
             messagebox.showinfo(title="Message", message=self.textbox.get('1.0', tk.END))
+    
+    # Shortcut with ENTER key
+    def shortcut(self, event):
+        if event.keycode == 13 and event.keysym == "Return":
+            self.show_message()
+
+    # Confimation on quitting application
+    def on_closing(self):
+        if messagebox.askyesno(title="Quit?", message="Would you like to quit?"):
+            self.root.destroy()
+
+
+MyGUI()
