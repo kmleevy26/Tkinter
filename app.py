@@ -2,6 +2,7 @@ import tkinter as tk
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from tkinter import filedialog as fd
+from pathlib import Path
 
 class App_GUI():
 
@@ -30,8 +31,22 @@ class App_GUI():
         self.b1.pack(padx=10, pady=10)
 
         # Button 2 widget
-        self.b2 = ttk.Button(self.root, text="Open file", bootstyle="success", command=self.open_file)
+        self.b2 = ttk.Button(self.root, text="Open file", bootstyle="success", command=self.select_file)
         self.b2.pack(padx=10, pady=10)
+        
+        # Dlpay list of files for public view
+        self.list = ttk.Treeview(self.root, columns=self.columns, show="headings", bootstyle="primary")
+        self.list.pack()
+
+        # List column widget
+        self.columns = ("Filename")
+
+        # List header
+        self.list.heading("Filename", text="Filename")
+
+        # file list for files
+        self.file_list = []
+
 
         
         
@@ -48,9 +63,35 @@ class App_GUI():
         else:
             print("Hello World!")
 
-    # Button 2 opens file fuction
-    def open_file(self):
-        fd.askopenfile()
+    # Button 2 open and write filename to list
+    def select_file(self):
+        self.filetypes = (
+            ('text files', '*.txt'),
+            ('All files', '*')
+        )
+
+        self.filename = fd.askopenfilename(
+            title="Open a file",
+            initialdir="/",
+            filetypes=self.filetypes
+        )
+        self.suffix = Path(self.filename).suffix
+        self.prefix = Path(self.filename).stem
+
+        self.new_file = self.prefix + self.suffix
+
+        print(self.new_file)
+
+        self.file_list.append(self.new_file)
+        print(self.file_list)
+
+        for file in self.file_list:
+            self.list.insert('', END, values=file)
+
+        self.file_list.pop()
+        
+        
+
 
 
 
