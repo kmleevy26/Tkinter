@@ -8,7 +8,26 @@ class MyGUI:
 
         # Root
         self.root = tk.Tk()
-        
+
+        # Creates Toolbar
+        self.menubar = tk.Menu(self.root)
+
+        # File Toolbar
+        self.filemenu = tk.Menu(self.menubar, tearoff=0)
+        self.filemenu.add_command(label="Close", command=self.on_closing)
+        self.filemenu.add_separator()
+        self.filemenu.add_command(label="Exit", command=exit)
+
+        # Message Toolbar
+        self.actionmenu = tk.Menu(self.menubar, tearoff=0)
+        self.actionmenu.add_command(label="Show Message", command=self.show_message)
+
+        # Toolbar widget
+        self.menubar.add_cascade(menu=self.filemenu, label="File")
+        self.menubar.add_cascade(menu=self.actionmenu, label="Message")
+    
+        self.root.config(menu=self.menubar)
+
         # Label
         self.label = tk.Label(self.root, text="Your Message", font=('Arial', 18))
         self.label.pack(padx=10, pady=10)
@@ -38,13 +57,11 @@ class MyGUI:
             print(self.textbox.get('1.0', tk.END))
         else:
             messagebox.showinfo(title="Message", message=self.textbox.get('1.0', tk.END))
-    
-    # Shortcut with ENTER key
+        
     def shortcut(self, event):
         if event.keycode == 13 and event.keysym == "Return":
             self.show_message()
 
-    # Confimation on quitting application
     def on_closing(self):
         if messagebox.askyesno(title="Quit?", message="Would you like to quit?"):
             self.root.destroy()
